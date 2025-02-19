@@ -24,4 +24,6 @@ const routes = [
 export const router = createRouter({
   history: createWebHistory(),
   routes,
+  linkActiveClass:
+    "router-link-active text-primary transition-colors transition-all duration-200 ease-in-out underline underline-offset-4",
 });

@@ -6,9 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css">
     <title>Bubble Pop</title>
+
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme === "true") {
+        document.documentElement.dataset.theme = "night";
+      } else {
+        document.documentElement.dataset.theme = "winter";
+      }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" ></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

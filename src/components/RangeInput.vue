@@ -3,7 +3,7 @@
     <label :for="props.title.toLowerCase()">{{ props.title }}:</label>
     <input
       type="range"
-      class="w-full appearance-none h-1 bg-slate-600 border-none rounded-xl"
+      class="w-full appearance-none h-2 bg-slate-600 border-none rounded-xl"
       :id="props.title.toLowerCase()"
       :min="props.min"
       :max="props.max"

@@ -1,9 +1,14 @@
 <template>
-  <div class="flex flex-col items-center" :key="props.title">
-    <label :for="`boba-${props.title}`" class="">{{ props.title }} </label>
-    <div class="">
+  <div
+    class="flex flex-col items-center disabled:select-none"
+    :key="props.title"
+  >
+    <label :for="`boba-${props.title}`" class="text-[0.75rem]"
+      >{{ props.title }}
+    </label>
+    <div class="flex border border-base-200 rounded">
       <button
-        class="btn text-2xl text-center size-9"
+        class="bg-slate-800 rounded-l border-r border-base-200 text-center size-6 cursor-pointer disabled:cursor-default disabled:bg-slate-700"
         @click.prevent="decrease"
         :disabled="model?.amount === 0 || model?.amount === undefined"
       >
@@ -14,11 +19,11 @@
         disabled
         :name="`boba-${props.title.toLocaleLowerCase()}`"
         :id="`${props.title}`"
-        class="input input-bordered text-center size-9 disabled:cursor-default"
+        class="text-center border-none text-auto size-6 disabled:cursor-default bg-slate-700"
         v-model="computedModel"
       />
       <button
-        class="btn text-2xl text-center size-9"
+        class="bg-slate-800 rounded-r border-l border-base-200 text-center size-6 cursor-pointer disabled:cursor-default disabled:bg-slate-700"
         @click.prevent="increase"
         :disabled="model?.amount === 4 || locked"
       >

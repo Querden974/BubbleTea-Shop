@@ -6,7 +6,6 @@
         type="radio"
         name="radio-10"
         :value="props.title.toLowerCase()"
-        :style="{ color: props.color }"
         :class="` radio radioColor radio-primary`"
         v-model="model"
       />
@@ -23,3 +22,5 @@ const props = defineProps({
 </script>
 
 <style scoped></style>
+
+<!-- :style="{ color: props.color }" -->

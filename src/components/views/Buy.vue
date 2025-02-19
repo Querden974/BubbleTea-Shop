@@ -1,27 +1,28 @@
 <template>
-  <div class="grid grid-cols-2 justify-center font-bold">
+  <div class="grid grid-cols-2 justify-center font-semibold">
     <img
       src="https://break-in.fr/cdn/shop/files/56FFFB8A-42DC-47E4-9758-2F26B56E700E_800x.png?v=1731691170"
       alt=""
-      class="h-[80%] justify-self-center"
+      draggable="false"
+      class="h-[80%] justify-self-center m-auto"
     />
     <div class="grid justify-center text-primary">
       <h1 class="text-2xl font-pacifico text-center">Buy Bubble Tea</h1>
-      <form action="" class="flex flex-col gap-4">
-        <label for="name" class="label"
-          >Name:
+      <form action="" class="flex flex-col gap-4 text-sm">
+        <div class="flex gap-2 items-baseline">
+          <label for="name" class="min-w-12">Name:</label>
           <input
             type="text"
             id="name"
             placeholder="Type your name"
             class="input input-bordered w-full max-w-xs"
             v-model="composed.name"
-        /></label>
+          />
+        </div>
 
         <!-- SIRUP FLAVORS -->
-        <label for="sirup" class="label">
-          Sirup:
-
+        <div class="flex gap-2 items-baseline">
+          <label for="name" class="min-w-12">Sirup:</label>
           <select
             id="sirup"
             class="select select-bordered w-full max-w-xs"
@@ -32,7 +33,8 @@
               {{ sirup }}
             </option>
           </select>
-        </label>
+        </div>
+
         <!-- ------------------------------------------------------------- -->
         <!-- TEA FLAVORS -->
         <div for="tea" class="flex flex-row w-full">
@@ -48,17 +50,27 @@
           </div>
         </div>
         <!-- ------------------------------------------------------------- -->
+        <hr class="text-gray-400" />
         <!-- BOBA FLAVORS -->
-        <div class="grid grid-cols-4 gap-4">
-          <CounterInput
-            v-for="boba in bobaFlavors"
-            :title="boba"
-            :locked="bobaLock"
-            :key="boba"
-            @change="(value) => addBoba(value)"
-            @click="(type) => changeAmount(type)"
-          />
+        <div class="flex flex-col gap-2">
+          <label for="boba" class="text-sm"
+            >Boba flavors:
+            <b class="underline f">{{ maxBoba - bobaCount }}</b> choices
+            left</label
+          >
+          <div class="grid grid-cols-4 gap-4">
+            <CounterInput
+              v-for="boba in bobaFlavors"
+              :title="boba"
+              :locked="bobaLock"
+              :key="boba"
+              @change="(value) => addBoba(value)"
+              @click="(type) => changeAmount(type)"
+            />
+          </div>
         </div>
+
+        <hr class="text-gray-400" />
         <!-- ------------------------------------------------------------- -->
         <RangeInput
           title="Sweetness"
@@ -86,7 +98,7 @@
         />
       </form>
     </div>
-    {{ composed }}
+    <p class="col-span-2 text-center">{{ composed }}</p>
   </div>
 </template>
 
@@ -104,6 +116,7 @@ const bobaFlavors = [
   "Apple",
   "Lemon",
   "Litchi",
+  "Jelly",
 ];
 
 const sirupFlavors = [
@@ -120,8 +133,8 @@ const sirupFlavors = [
 
 const teaFlavors = [
   { name: "Green", color: "#00e000" },
-  { name: "Black", color: "#000" },
-  { name: "White", color: "#fff" },
+  { name: "Black", color: "#000000" },
+  { name: "White", color: "lightgrey" },
   { name: "Blue", color: "#0000e0" },
 ];
 

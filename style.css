@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+    themes: winter , night --default;
+  }
 
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
