@@ -1,6 +1,27 @@
-# Vue 3 + Vite
+# Bubble Tea Shop
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Bubble Tea Shop est une application web qui permet aux utilisateurs de pouvoir composer et acheter un bubble tea parmis les produits proposés
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
-# BubbleTea-Shop
+## Technologies
+
+- Vue 3
+- CSS + Tailwind
+- JavaScript
+
+## Changelog
+
+### Version 1.1
+
+**Date de publication :** _19/02/2025_
+
+- Utilisation de composants pour créer une interface plus modulaire
+- Fonctions pour envoyer les informations entre composants parents et enfants
+- Fonction pour changer de theme (dark/light)
+
+### Version 1.0
+
+**Date de publication :** _18/02/2025_
+
+- Creation du projet Bubble Tea Shop
+- Mise en place de l'UI avec Vue 3
+- Ajout de la gestion des routes avec Vue Router
