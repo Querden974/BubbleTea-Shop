@@ -1,13 +1,13 @@
 <template>
-  <div class="">
+  <div>
     <label :for="props.title.toLowerCase()">{{ props.title }}:</label>
     <input
       type="range"
-      class="w-full appearance-none h-1 bg-slate-600 border-none rounded-xl accent-primary"
+      class="w-full appearance-none h-1 bg-slate-600 border-none rounded-xl"
       :id="props.title.toLowerCase()"
       :min="props.min"
       :max="props.max"
-      :value="props.startAt"
+      v-model="computedModel"
       :step="props.step"
     />
     <div class="flex w-full justify-between px-1 text-xs">
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { computed, defineProps } from "vue";
 
 const props = defineProps({
   title: String,
@@ -26,6 +26,13 @@ const props = defineProps({
   startAt: Number,
   step: Number,
   scale: Array,
+});
+
+const model = defineModel();
+
+const computedModel = computed({
+  get: () => (model.value === 0 ? props.startAt : model.value),
+  set: (newValue) => (model.value = newValue),
 });
 </script>
 
