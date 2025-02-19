@@ -1,0 +1,25 @@
+<template>
+  <div class="">
+    <label class="cursor-pointer flex gap-2">
+      <span class="">{{ props.title }}</span>
+      <input
+        type="radio"
+        name="radio-10"
+        :value="props.title.toLowerCase()"
+        :style="{ color: props.color }"
+        :class="` radio radioColor radio-primary`"
+        v-model="model"
+      />
+    </label>
+  </div>
+</template>
+
+<script setup>
+const model = defineModel();
+const props = defineProps({
+  title: String,
+  color: String,
+});
+</script>
+
+<style scoped></style>
