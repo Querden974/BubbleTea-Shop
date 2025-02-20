@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from "vue";
+import { computed, defineProps, onMounted } from "vue";
 
 const props = defineProps({
   title: String,
@@ -29,10 +29,11 @@ const props = defineProps({
 });
 
 const model = defineModel();
+onMounted(() => (model.value = props.startAt));
 
 const computedModel = computed({
-  get: () => (model.value === 0 ? props.startAt : model.value),
-  set: (newValue) => (model.value = newValue),
+  get: () => (model.value === undefined ? props.startAt : model.value),
+  set: (newValue) => (model.value = Number(newValue)),
 });
 </script>
 
