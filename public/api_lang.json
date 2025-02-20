@@ -1,0 +1,104 @@
+{
+    "navbar": {
+        "gb": {
+            "home": "Home",
+            "buy": "Buy",
+            "about": "About",
+            "tooltip": "Toggle theme"
+        },
+        "fr": {
+            "home": "Accueil",
+            "buy": "Acheter",
+            "about": "À propos",
+            "tooltip": "Changer le thème"
+        },
+        "jp": {
+            "home": "ホーム",
+            "buy": "購入",
+            "about": "概要",
+            "tooltip": "テーマを変更"
+        }
+    },
+    "home": {
+        "gb": {
+            "title": "Bubble tea lovers come to the rescue!",
+            "subtitle": "Create your onw bubble tea and enjoy it according to your taste.",
+            "button": "Buy Now!"
+        },
+        "fr": {
+            "title": "Les amoureux des bubble tea viennent à la rescousse!",
+            "subtitle": "Créez votre propre bubble tea et profitez-en en fonction de votre goût.",
+            "button": "Acheter maintenant!"
+        },
+        "jp": {
+            "title": "タピオカティー愛好家が救援に駆けつける！",
+            "subtitle": "自分だけのタピオカティーを作って、お好みに合わせて楽しもう。",
+            "button": "今すぐ購入！"
+        }
+    },
+    "buy": {
+        "gb": {
+            "title": "Bubble Tea Editor",
+            "name": "Name:",
+            "sirup": "Sirup:",
+            "tea": "Tea:",
+            "boba": "Boba flavors:",
+            "boba_count": "choices left",
+            "sweetness": "Sweetness",
+            "sweet_level": [
+                "Sour",
+                "Balanced",
+                "Sweet"
+            ],
+            "ice": "Ice",
+            "ice_level": [
+                "No",
+                "Regular",
+                "Lots"
+            ],
+            "submit": "Submit your order"
+        },
+        "fr": {
+            "title": "Configurateur de Bubble Tea",
+            "name": "Nom:",
+            "sirup": "Sirop:",
+            "tea": "Thé:",
+            "boba": "Saveur des bobas:",
+            "boba_count": "choix restants",
+            "sweetness": "Douceur",
+            "sweet_level": [
+                "Acidulé",
+                "Équilibré",
+                "Doux"
+            ],
+            "ice": "Glaçons",
+            "ice_level": [
+                "Sans",
+                "Régulier",
+                "Beaucoup"
+            ],
+            "submit": "Envoyer votre commande"
+        },
+        "jp": {
+            "title": "タピオカティーコンフィギュレーター",
+            "name": "名前:",
+            "sirup": "シロップ:",
+            "tea": "お茶:",
+            "boba": "タピオカのフレーバー:",
+            "boba_count": "残りの選択肢",
+            "sweetness": "甘さ",
+            "sweet_level": [
+                "酸味がある",
+                "バランスの良い",
+                "甘い"
+            ],
+            "ice": "氷",
+            "ice_level": [
+                "なし",
+                "普通",
+                "たっぷり"
+            ],
+            "submit": "注文を送信"
+        }
+    }
+}

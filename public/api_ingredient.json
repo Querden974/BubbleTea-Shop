@@ -1,0 +1,278 @@
+{
+  "boba": {
+    "gb": [
+      {
+        "name": "Tapioca",
+        "code": "tapioca"
+      },
+      {
+        "name": "Sugar",
+        "code": "sugar"
+      },
+      {
+        "name": "Peach",
+        "code": "peach"
+      },
+      {
+        "name": "Grape",
+        "code": "grape"
+      },
+      {
+        "name": "Apple",
+        "code": "apple"
+      },
+      {
+        "name": "Lemon",
+        "code": "lemon"
+      },
+      {
+        "name": "Litchi",
+        "code": "litchi"
+      },
+      {
+        "name": "Jelly",
+        "code": "jelly"
+      }
+    ],
+    "fr": [
+      {
+        "name": "Tapioca",
+        "code": "tapioca"
+      },
+      {
+        "name": "Sucre",
+        "code": "sugar"
+      },
+      {
+        "name": "Pêche",
+        "code": "peach"
+      },
+      {
+        "name": "Raisin",
+        "code": "grape"
+      },
+      {
+        "name": "Pomme",
+        "code": "apple"
+      },
+      {
+        "name": "Citron",
+        "code": "lemon"
+      },
+      {
+        "name": "Litchi",
+        "code": "litchi"
+      },
+      {
+        "name": "Jelly",
+        "code": "jelly"
+      }
+    ],
+    "jp": [
+      {
+        "name": "タピオカ",
+        "code": "tapioca"
+      },
+      {
+        "name": "砂糖",
+        "code": "sugar"
+      },
+      {
+        "name": "桃",
+        "code": "peach"
+      },
+      {
+        "name": "グレープ",
+        "code": "grape"
+      },
+      {
+        "name": "りんご",
+        "code": "apple"
+      },
+      {
+        "name": "レモン",
+        "code": "lemon"
+      },
+      {
+        "name": "リッチー",
+        "code": "litchi"
+      },
+      {
+        "name": "ジェリー",
+        "code": "jelly"
+      }
+    ]
+  },
+  "sirup": {
+    "gb": [
+      {
+        "name": "Peach",
+        "code": "peach"
+      },
+      {
+        "name": "Grape",
+        "code": "grape"
+      },
+      {
+        "name": "Strawberry",
+        "code": "strawberry"
+      },
+      {
+        "name": "Lemon",
+        "code": "lemon"
+      },
+      {
+        "name": "Orange",
+        "code": "orange"
+      },
+      {
+        "name": "Pear",
+        "code": "pear"
+      },
+      {
+        "name": "Melon",
+        "code": "melon"
+      },
+      {
+        "name": "Cherry",
+        "code": "cherry"
+      },
+      {
+        "name": "Watermelon",
+        "code": "watermelon"
+      }
+    ],
+    "fr": [
+      {
+        "name": "Pêche",
+        "code": "peach"
+      },
+      {
+        "name": "Raisin",
+        "code": "grape"
+      },
+      {
+        "name": "Fraise",
+        "code": "strawberry"
+      },
+      {
+        "name": "Citron",
+        "code": "lemon"
+      },
+      {
+        "name": "Orange",
+        "code": "orange"
+      },
+      {
+        "name": "Poire",
+        "code": "pear"
+      },
+      {
+        "name": "Melon",
+        "code": "melon"
+      },
+      {
+        "name": "Cerise",
+        "code": "cherry"
+      },
+      {
+        "name": "Pastèque",
+        "code": "watermelon"
+      }
+    ],
+    "jp": [
+      {
+        "name": "桃",
+        "code": "peach"
+      },
+      {
+        "name": "グレープ",
+        "code": "grape"
+      },
+      {
+        "name": "イチゴ",
+        "code": "strawberry"
+      },
+      {
+        "name": "レモン",
+        "code": "lemon"
+      },
+      {
+        "name": "オレンジ",
+        "code": "orange"
+      },
+      {
+        "name": "ピアー",
+        "code": "pear"
+      },
+      {
+        "name": "メロン",
+        "code": "melon"
+      },
+      {
+        "name": "チェリー",
+        "code": "cherry"
+      },
+      {
+        "name": "ウォーターメロン",
+        "code": "watermelon"
+      }
+    ]
+  },
+  "tea": {
+    "gb": [
+      {
+        "name": "Green",
+        "code": "green"
+      },
+      {
+        "name": "Black",
+        "code": "black"
+      },
+      {
+        "name": "White",
+        "code": "white"
+      },
+      {
+        "name": "Blue",
+        "code": "blue"
+      }
+    ],
+    "fr": [
+      {
+        "name": "Vert",
+        "code": "green"
+      },
+      {
+        "name": "Noir",
+        "code": "black"
+      },
+      {
+        "name": "Blanc",
+        "code": "white"
+      },
+      {
+        "name": "Bleu",
+        "code": "blue"
+      }
+    ],
+    "jp": [
+      {
+        "name": "緑",
+        "code": "green"
+      },
+      {
+        "name": "黒",
+        "code": "black"
+      },
+      {
+        "name": "白",
+        "code": "white"
+      },
+      {
+        "name": "青",
+        "code": "blue"
+      }
+    ]
+  }
+}
