@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="select-none">
     <label class="cursor-pointer flex gap-2">
       <span class="">{{ props.title }}</span>
       <input

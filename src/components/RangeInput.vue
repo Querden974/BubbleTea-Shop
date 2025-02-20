@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="select-none">
     <label :for="props.title.toLowerCase()">{{ props.title }}:</label>
     <input
       type="range"
