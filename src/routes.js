@@ -3,19 +3,21 @@ import Home from "./components/views/Home.vue";
 import Buy from "./components/views/Buy.vue";
 import About from "./components/views/About.vue";
 
+const base = import.meta.env.VITE_ROUTE_BASE;
+
 const routes = [
   {
-    path: "/",
+    path: base + "/",
     name: "home",
     component: Home,
   },
   {
-    path: "/buy",
+    path: base + "/buy",
     name: "buy",
     component: Buy,
   },
   {
-    path: "/about",
+    path: base + "/about",
     name: "about",
     component: About,
   },
