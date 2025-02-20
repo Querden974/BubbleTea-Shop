@@ -34,14 +34,32 @@
     </RouterLink>
 
     <nav class="flex gap-4 font-semibold justify-center col-span-2">
-      <RouterLink :to="{ name: 'home' }">Home</RouterLink>
-      <RouterLink :to="{ name: 'buy' }">Buy</RouterLink>
-      <RouterLink :to="{ name: 'about' }">About</RouterLink>
+      <RouterLink
+        :to="{ name: 'home' }"
+        v-if="langData && langData.navbar[lang]"
+        >{{ langData.navbar[lang].home }}</RouterLink
+      >
+      <RouterLink
+        :to="{ name: 'buy' }"
+        v-if="langData && langData.navbar[lang]"
+        >{{ langData.navbar[lang].buy }}</RouterLink
+      >
+      <RouterLink
+        :to="{ name: 'about' }"
+        v-if="langData && langData.navbar[lang]"
+        >{{ langData.navbar[lang].about }}</RouterLink
+      >
     </nav>
 
-    <div class="flex gap-3">
+    <div
+      class="flex sm:gap-3 w-auto sm:ml-auto"
+      v-if="langData && langData.navbar[lang]"
+    >
       <changeLang :theme="Boolean(theme)" />
-      <label class="swap swap-rotate w-fit ml-auto">
+      <label
+        class="swap swap-rotate w-fit ml-auto tooltip tooltip-bottom font-delius"
+        :data-tip="langData.navbar[lang].tooltip"
+      >
         <!-- this hidden checkbox controls the state -->
         <input @change="toggleTheme" type="checkbox" v-model="theme" />
 
@@ -71,12 +89,15 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, inject } from "vue";
 import changeLang from "./changeLang.vue";
 
 const theme = ref(
   localStorage.getItem("theme") ? localStorage.getItem("theme") : true
 );
+
+const lang = inject("lang");
+const langData = inject("langData");
 
 const toggleTheme = computed(() => {
   const page = document.querySelector("html");

@@ -1,6 +1,14 @@
 <template>
-  <div class="flex flex-col auto-rows-min justify-center font-delius gap-6">
-    <h1 class="text-2xl text-center h-min">Bubble Tea Editor</h1>
+  <div
+    class="flex flex-col auto-rows-min justify-center font-delius gap-6"
+    v-if="langData && langData.buy[lang]"
+  >
+    <h1
+      class="text-2xl text-center h-min"
+      v-if="langData && langData.buy[lang]"
+    >
+      {{ langData.buy[lang].title }}
+    </h1>
     <div class="sm:grid sm:grid-cols-2 sm:gap-32">
       <img
         src="../../assets/winnies-special-tea-bubble-tea-cup-q9b8f2tsdm8omdh1.png"
@@ -12,7 +20,12 @@
       <div class="grid justify-center text-primary mr-auto gap-6">
         <form action="" class="flex flex-col gap-4 text-sm">
           <div class="flex gap-2 items-baseline">
-            <label for="name" class="min-w-12">Name:</label>
+            <label
+              for="name"
+              class="min-w-18 ml-auto"
+              v-if="langData && langData.buy[lang]"
+              >{{ langData.buy[lang].name }}</label
+            >
             <input
               type="text"
               id="name"
@@ -24,15 +37,25 @@
 
           <!-- SIRUP FLAVORS -->
           <div class="flex gap-2 items-baseline">
-            <label for="name" class="min-w-12">Sirup:</label>
+            <label
+              for="sirup"
+              class="min-w-18"
+              v-if="langData && langData.buy[lang]"
+              >{{ langData.buy[lang].sirup }}</label
+            >
             <select
               id="sirup"
               class="select select-bordered w-full max-w-xs"
               v-model="composed.sirup"
             >
               <option disabled selected>Choose your sirup</option>
-              <option v-for="sirup in sirupFlavors" :value="sirup">
-                {{ sirup }}
+              <option
+                v-if="sirupFlavors && sirupFlavors[lang]"
+                v-for="sirup in sirupFlavors[lang]"
+                :value="sirup.code"
+                :key="sirup.code"
+              >
+                {{ sirup.name }}
               </option>
             </select>
           </div>
@@ -40,13 +63,21 @@
           <!-- ------------------------------------------------------------- -->
           <!-- TEA FLAVORS -->
           <div for="tea" class="flex flex-row w-full">
-            <label class="w-fit" for="">Tea:</label>
+            <label
+              class="min-w-18"
+              for=""
+              v-if="langData && langData.buy[lang]"
+              >{{ langData.buy[lang].tea }}</label
+            >
             <div class="flex justify-evenly w-full">
               <RadioInput
-                v-for="tea in teaFlavors"
-                :key="tea.name"
+                v-if="teaFlavors && teaFlavors[lang]"
+                v-for="(tea, index) in teaFlavors[lang]"
+                :key="tea.code"
+                :code="tea.code"
+                :index="index"
                 :title="tea.name"
-                :color="tea.color"
+                :length="teaFlavors[lang].length"
                 v-model="composed.tea"
               />
             </div>
@@ -55,17 +86,21 @@
           <hr class="text-gray-400" />
           <!-- BOBA FLAVORS -->
           <div class="flex flex-col gap-2">
-            <label for="boba" class="text-sm"
-              >Boba flavors:
-              <b class="underline f">{{ maxBoba - bobaCount }}</b> choices
-              left</label
+            <label
+              for="boba"
+              class="text-sm"
+              v-if="langData && langData.buy[lang]"
+              >{{ langData.buy[lang].boba }}
+              <b class="underline f">{{ maxBoba - bobaCount }}</b>
+              {{ langData.buy[lang].boba_count }}</label
             >
             <div class="grid grid-cols-4 gap-4">
               <CounterInput
-                v-for="boba in bobaFlavors"
-                :title="boba.en"
+                v-if="bobaFlavors && bobaFlavors[lang]"
+                v-for="boba in bobaFlavors[lang]"
+                :title="boba.name"
                 :locked="bobaLock"
-                :key="boba"
+                :key="boba.code"
                 @change="(value) => addBoba(value)"
                 @click="(type) => changeAmount(type)"
               />
@@ -75,27 +110,30 @@
           <hr class="text-gray-400" />
           <!-- ------------------------------------------------------------- -->
           <RangeInput
-            title="Sweetness"
+            v-if="langData && langData.buy[lang]"
+            :title="langData.buy[lang].sweetness"
             :min="-5"
             :max="5"
             :step="0.5"
             :startAt="0"
-            :scale="['Sour', 'Balanced', 'Sweet']"
+            :scale="langData.buy[lang].sweet_level"
             v-model="composed.sweetness"
           />
           <RangeInput
-            title="Ice"
+            v-if="langData && langData.buy[lang]"
+            :title="langData.buy[lang].ice"
             :min="0"
             :max="5"
             :step="0.5"
             :startAt="2.5"
-            :scale="['No Ice', 'Regular', 'Lots of Ice']"
+            :scale="langData.buy[lang].ice_level"
             v-model="composed.ice"
           />
 
           <input
+            v-if="langData && langData.buy[lang]"
             type="submit"
-            value="Submit your order"
+            :value="langData.buy[lang].submit"
             class="btn btn-primary"
             :disabled="submitable"
           />
@@ -103,61 +141,49 @@
       </div>
     </div>
   </div>
-  <p class="col-span-2 text-center">{{ bobaFlavors }}</p>
+  <p>{{ composed }}</p>
 </template>
 
 <script setup>
 import CounterInput from "../CounterInput.vue";
 import RangeInput from "../RangeInput.vue";
 import RadioInput from "../RadioInput.vue";
-import { ref, computed, onMounted, onBeforeMount, watch } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onBeforeMount,
+  watch,
+  inject,
+  unref,
+  provide,
+} from "vue";
 
 const ingredients = ref();
 const bobaFlavors = ref();
+const sirupFlavors = ref();
+const teaFlavors = ref();
+
+const lang = inject("lang");
+const langData = inject("langData");
+
+const api = ref(import.meta.env.VITE_API_INGR);
 
 onBeforeMount(async () => {
   try {
-    const response = await fetch("/api_ingredient.json"); // ✅ Corrige le chemin
+    const response = await fetch(api.value); // ✅ Corrige le chemin
     if (!response.ok) {
       throw new Error("HTTP error " + response.status);
     }
     ingredients.value = await response.json();
     bobaFlavors.value = ingredients.value.boba;
-    console.log(ingredients.value);
+    sirupFlavors.value = ingredients.value.sirup;
+    teaFlavors.value = ingredients.value.tea;
+    //console.log(ingredients.value);
   } catch (error) {
     console.error("Erreur lors de la récupération des ingrédients :", error);
   }
 });
-
-// const bobaFlavors = [
-//   "Tapioca",
-//   "Sugar",
-//   "Peach",
-//   "Grape",
-//   "Apple",
-//   "Lemon",
-//   "Litchi",
-//   "Jelly",
-// ];
-
-const sirupFlavors = [
-  "Peach",
-  "Grape",
-  "Strawberry",
-  "Lemon",
-  "Orange",
-  "Pear",
-  "Melon",
-  "Cherry",
-  "Watermelon",
-];
-
-const teaFlavors = [
-  { name: "Green", color: "#00e000" },
-  { name: "Black", color: "#000000" },
-  { name: "White", color: "lightgrey" },
-  { name: "Blue", color: "#0000e0" },
-];
 
 const composed = ref({
   name: "",
@@ -167,6 +193,7 @@ const composed = ref({
   sweetness: 0,
   ice: 0,
 });
+provide("composed", composed);
 
 const maxBoba = 4;
 const bobaCount = ref(0);

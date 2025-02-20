@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="langData && langData.home[lang]"
     :class="`grid grid-rows-1 gap-4 p-4 mt-6 justify-center rounded-xl bg-neutral sm:bg-transparent shadow-md sm:shadow-none ${
       page === 'night'
         ? 'sm:shadow-white/25 sm:border-white/25 '
@@ -17,23 +18,26 @@
     >
       <div class="font-delius">
         <h1 class="text-xl text-primary uppercase font-bold">
-          Bubble tea lovers come to the rescue!
+          {{ langData.home[lang].title }}
         </h1>
         <p class="text-white">
-          Create your onw bubble tea and enjoy it according to your taste.
+          {{ langData.home[lang].subtitle }}
         </p>
       </div>
       <RouterLink
         :to="{ name: 'buy' }"
         class="btn btn-primary border-none font-delius"
-        >Buy Now!</RouterLink
+        >{{ langData.home[lang].button }}!</RouterLink
       >
     </div>
   </div>
 </template>
 
 <script setup>
+import { inject } from "vue";
 const page = document.querySelector("html").dataset.theme;
+const langData = inject("langData");
+const lang = inject("lang");
 </script>
 
 <style scoped></style>

@@ -1,13 +1,14 @@
 <template>
   <button
+    :disabled="code === current"
     :value="code"
     @click="emits('click', code)"
-    class="flex items-center gap-2 p-1 hover:bg-red-300 hover:rounded-md w-full cursor-pointer"
+    :class="`flex items-center gap-2 p-1 disable  hover:rounded-md  w-fitsm:w-full cursor-pointer hover:bg-primary/80`"
   >
     <div class="rounded-full size">
       <span :class="`fi fis fi-${code} rounded-full`"></span>
     </div>
-    <p class="text-xs">{{ lang }}</p>
+    <p class="text-xs sm:block hidden">{{ lang }}</p>
   </button>
 </template>
 
@@ -15,6 +16,7 @@
 const props = defineProps({
   lang: String,
   code: String,
+  current: String,
 });
 
 const emits = defineEmits(["click"]);
