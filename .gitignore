@@ -23,3 +23,5 @@ vscode
 *.njsproj
 *.sln
 *.sw?
+.env
+_redirects
