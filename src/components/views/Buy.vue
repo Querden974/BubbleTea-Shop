@@ -1,13 +1,13 @@
 <template>
-  <div class="grid grid-cols-2 justify-center font-semibold">
+  <div class="grid grid-cols-2 justify-center font-delius">
     <img
       src="https://break-in.fr/cdn/shop/files/56FFFB8A-42DC-47E4-9758-2F26B56E700E_800x.png?v=1731691170"
       alt=""
       draggable="false"
-      class="h-[80%] justify-self-center m-auto"
+      class="min-h-60 max-h-150 aspect-square justify-self-center m-auto"
     />
     <div class="grid justify-center text-primary">
-      <h1 class="text-2xl font-pacifico text-center">Buy Bubble Tea</h1>
+      <h1 class="text-2xl text-center">Buy Bubble Tea</h1>
       <form action="" class="flex flex-col gap-4 text-sm">
         <div class="flex gap-2 items-baseline">
           <label for="name" class="min-w-12">Name:</label>
@@ -77,6 +77,7 @@
           :min="-5"
           :max="5"
           :step="0.5"
+          :startAt="0"
           :scale="['Sour', 'Balanced', 'Sweet']"
           v-model="composed.sweetness"
         />

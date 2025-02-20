@@ -9,13 +9,17 @@
     <div
       class="row-start-1 col-start-1 flex flex-col justify-center mt-6 z-10 p-4 w-[40%] ml-auto gap-6"
     >
-      <div class="">
+      <div class="font-delius">
         <h1 class="text-xl text-primary uppercase font-bold">
           Bubble tea lovers come to the rescue!
         </h1>
-        <p>Create your onw bubble tea and enjoy it according to your taste.</p>
+        <p class="text-white">
+          Create your onw bubble tea and enjoy it according to your taste.
+        </p>
       </div>
-      <RouterLink :to="{ name: 'buy' }" class="btn btn-primary border-none"
+      <RouterLink
+        :to="{ name: 'buy' }"
+        class="btn btn-primary border-none font-delius"
         >Buy Now!</RouterLink
       >
     </div>
