@@ -63,7 +63,7 @@
             <div class="grid grid-cols-4 gap-4">
               <CounterInput
                 v-for="boba in bobaFlavors"
-                :title="boba"
+                :title="boba.en"
                 :locked="bobaLock"
                 :key="boba"
                 @change="(value) => addBoba(value)"
@@ -103,25 +103,42 @@
       </div>
     </div>
   </div>
-  <p class="col-span-2 text-center">{{ composed }}</p>
+  <p class="col-span-2 text-center">{{ bobaFlavors }}</p>
 </template>
 
 <script setup>
 import CounterInput from "../CounterInput.vue";
 import RangeInput from "../RangeInput.vue";
 import RadioInput from "../RadioInput.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeMount, watch } from "vue";
 
-const bobaFlavors = [
-  "Tapioca",
-  "Sugar",
-  "Peach",
-  "Grape",
-  "Apple",
-  "Lemon",
-  "Litchi",
-  "Jelly",
-];
+const ingredients = ref();
+const bobaFlavors = ref();
+
+onBeforeMount(async () => {
+  try {
+    const response = await fetch("/api_ingredient.json"); // ✅ Corrige le chemin
+    if (!response.ok) {
+      throw new Error("HTTP error " + response.status);
+    }
+    ingredients.value = await response.json();
+    bobaFlavors.value = ingredients.value.boba;
+    console.log(ingredients.value);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des ingrédients :", error);
+  }
+});
+
+// const bobaFlavors = [
+//   "Tapioca",
+//   "Sugar",
+//   "Peach",
+//   "Grape",
+//   "Apple",
+//   "Lemon",
+//   "Litchi",
+//   "Jelly",
+// ];
 
 const sirupFlavors = [
   "Peach",
