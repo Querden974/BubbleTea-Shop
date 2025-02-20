@@ -1,7 +1,7 @@
 <template>
   <header class="navbar grid grid-cols-3 auto-cols-fr shadow-lg font-pacifico">
     <h2
-      class="font-bold text-2xl text-primary inline-flex items-center gap-2 cursor-pointer"
+      class="font-bold text-2xl text-primary inline-flex place-items-center gap-2 cursor-pointer z-10"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +59,11 @@ import { computed, onMounted, ref } from "vue";
 const theme = ref(
   localStorage.getItem("theme") ? localStorage.getItem("theme") : true
 );
-console.log(theme.value);
 
 const toggleTheme = computed(() => {
   const page = document.querySelector("html");
   page.dataset.theme = theme.value ? "night" : "winter";
   localStorage.setItem("theme", theme.value);
-
-  console.log(theme.value);
 });
 </script>
 
