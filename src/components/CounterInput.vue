@@ -55,14 +55,12 @@ const decrease = computed(() => {
   model.value = list.value;
   emits("change", model.value);
   emits("click", "sub");
-  console.log(model.value.amount);
 });
 const increase = computed(() => {
   list.value.amount++;
   model.value = list.value;
   emits("change", model.value);
   emits("click", "add");
-  console.log(model.value.amount);
 });
 </script>
 
