@@ -12,6 +12,14 @@ Bubble Tea Shop est une application web qui permet aux utilisateurs de composer 
 
 ### Version 1.2
 
+**Date de publication :** _21/02/2025_
+
+- Création d'un model 3D basique pour le gobelet à afficher.
+- Apprentissage des bases de Three.js pour l'intégration de scene 3D sur un site web.
+- Création du composant pour visualiser la composition de son thé.
+
+### Version 1.2
+
 **Date de publication :** _20/02/2025_
 
 - Ajout d'un mode mobile
