@@ -1,0 +1,114 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "Houdini GLTF 2.0 Exporter"
+  },
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 2298,
+      "type": "SCALAR",
+      "min": [0],
+      "max": [411]
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 412,
+      "type": "VEC3",
+      "min": [-9.6868372, -0.5, -9.71619892],
+      "max": [9.7259903, 30.3976021, 9.71619892]
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 412,
+      "type": "VEC4",
+      "min": [-280, -280, -280, 1],
+      "max": [0.998993099, 0.0424687713, 0.995974302, 1]
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 412,
+      "type": "VEC3",
+      "min": [-0.993956327, -0.831676304, -0.992955506],
+      "max": [0.993265986, 0.971273065, 0.992955506]
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 412,
+      "type": "VEC2",
+      "min": [0.00747036934, 0],
+      "max": [1.23577738, 1]
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "cup_data.bin",
+      "byteLength": 24372,
+      "name": "main_buffer"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 4596,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 4596,
+      "byteLength": 4944,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 9540,
+      "byteLength": 6592,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 16132,
+      "byteLength": 4944,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 21076,
+      "byteLength": 3296,
+      "target": 34962
+    }
+  ],
+  "nodes": [
+    {
+      "name": "cup",
+      "mesh": 0
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "TEXCOORD_0": 4,
+            "TANGENT": 2,
+            "POSITION": 1,
+            "NORMAL": 3
+          },
+          "indices": 0
+        }
+      ],
+      "name": "transform1"
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [0]
+    }
+  ],
+  "scene": 0
+}

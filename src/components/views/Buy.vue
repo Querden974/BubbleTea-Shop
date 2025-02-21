@@ -10,13 +10,19 @@
       {{ langData.buy[lang].title }}
     </h1>
     <div class="sm:grid sm:grid-cols-2 sm:gap-32">
-      <img
+      <!-- <img
         src="../../assets/winnies-special-tea-bubble-tea-cup-q9b8f2tsdm8omdh1.png"
         alt=""
         draggable="false"
         class="min-h-60 max-h-100 justify-self-center my-auto ml-auto hidden sm:inline-block"
-      />
-
+      /> -->
+      <div
+        id="viz"
+        class="justify-self-center my-auto ml-auto hidden sm:inline-block w-fit h-fit overflow-hidden"
+      >
+        <Viz />
+      </div>
+      <!-- Bubble tea Editor Form -->
       <div class="grid justify-center text-primary mr-auto gap-6">
         <form action="" class="flex flex-col gap-4 text-sm">
           <div class="flex gap-2 items-baseline">
@@ -139,6 +145,7 @@
           />
         </form>
       </div>
+      <!-- End Bubble tea Editor Form -->
     </div>
   </div>
   <p>{{ composed }}</p>
@@ -148,6 +155,8 @@
 import CounterInput from "../CounterInput.vue";
 import RangeInput from "../RangeInput.vue";
 import RadioInput from "../RadioInput.vue";
+// import vizualize, { setSize } from "../functions/3DViz.vue";
+import Viz from "../functions/Viz.vue";
 import {
   ref,
   computed,
@@ -158,6 +167,7 @@ import {
   unref,
   provide,
 } from "vue";
+import { Container } from "postcss";
 
 const ingredients = ref();
 const bobaFlavors = ref();
@@ -168,8 +178,11 @@ const lang = inject("lang");
 const langData = inject("langData");
 
 const api = ref(import.meta.env.VITE_API_INGR);
+const vizContainer = ref();
+const vizSize = ref();
 
 onBeforeMount(async () => {
+  // Fetch ingredients
   try {
     const response = await fetch(api.value); // ✅ Corrige le chemin
     if (!response.ok) {
@@ -183,6 +196,8 @@ onBeforeMount(async () => {
   } catch (error) {
     console.error("Erreur lors de la récupération des ingrédients :", error);
   }
+
+  //Set Size of 3D Viz
 });
 
 const composed = ref({
