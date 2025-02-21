@@ -10,4 +10,7 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "./assets",
   },
+  optimizeDeps: {
+    exclude: ["path", "fs", "url", "source-map-js"],
+  },
 });
