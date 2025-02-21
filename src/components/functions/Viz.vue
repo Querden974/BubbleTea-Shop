@@ -35,7 +35,7 @@ const cupMaterial = new THREE.MeshStandardMaterial({
 });
 const cup = new GLTFLoader();
 cup.load(
-  "/cup/cup.gltf",
+  import.meta.env.VITE_OBJ_CUP,
   function (gltf) {
     const model = gltf.scene;
     model.scale.set(0.1, 0.1, 0.1);
@@ -81,7 +81,7 @@ const liquidMaterial = new THREE.MeshPhysicalMaterial({
 });
 const liquid = new GLTFLoader();
 liquid.load(
-  "/tea/tea.gltf",
+  import.meta.env.VITE_OBJ_TEA,
   function (gltf) {
     const model = gltf.scene;
     model.scale.set(0.1, 0.1, 0.1);
