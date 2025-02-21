@@ -5,12 +5,13 @@ Bubble Tea Shop est une application web qui permet aux utilisateurs de composer 
 ## Technologies
 
 - Vue 3
+- Three.js
 - CSS + Tailwind + daisyUI
 - JavaScript
 
 ## Changelog
 
-### Version 1.2
+### Version 1.3
 
 **Date de publication :** _21/02/2025_
 
