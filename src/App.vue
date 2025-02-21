@@ -27,7 +27,7 @@ onBeforeMount(async () => {
       throw new Error("HTTP error " + response.status);
     }
     langData.value = await response.json();
-    console.log(langData.value);
+    //console.log(langData.value);
   } catch (error) {
     console.error("Erreur lors de la récupération des ingrédients :", error);
   }
