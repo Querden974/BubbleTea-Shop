@@ -11,6 +11,14 @@ Bubble Tea Shop est une application web qui permet aux utilisateurs de composer 
 
 ## Changelog
 
+### Version 1.4
+
+**Date de publication :** _23/02/2025_
+
+- Modification de la structure du code 3D
+- Création des classes dans le fichier `3DViz.js` pour l' initialisation de la vue 3D et l'import des modèles GLTF
+- Utilisation d'instance pour initialiser la vue 3D
+
 ### Version 1.3
 
 **Date de publication :** _21/02/2025_
