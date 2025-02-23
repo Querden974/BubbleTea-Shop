@@ -1,121 +1,45 @@
 <template>
-  <div v-show="true" ref="threeContainer" class="size-[500px]"></div>
+  <div
+    v-show="true"
+    ref="threeContainer"
+    class="size-[500px] justify-self-center my-auto ml-auto hidden sm:inline-block overflow-hidden"
+  ></div>
 </template>
 
 <script setup>
 import * as THREE from "three";
+import { Geometry, ImportGLTF, Initialize } from "./3DViz";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { inject, onMounted, ref } from "vue";
 
 const threeContainer = ref();
 const size = ref();
 const composed = inject("composed");
-console.log(composed.value);
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 
-renderer.localClippingEnabled = true;
-renderer.setAnimationLoop(animate);
+const init = new Initialize();
+init.renderer.setAnimationLoop(animate);
+const scene = init.scene;
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, 500 / 500, 0.1, 1000);
-camera.position.set(0, 1.5, 3.5);
-camera.rotation.x = (Math.PI / 2) * 0.05;
-
-//const orbit = new OrbitControls(camera, renderer.domElement);
+const localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), -0.1);
+const helper = new THREE.PlaneHelper(localPlane, 3, 0xffff00);
+scene.add(helper);
 
 //---------------- IMPORT CUP --------------------//
 
-const cupMaterial = new THREE.MeshStandardMaterial({
-  color: 0xffffff,
-  transparent: true,
-  opacity: 0.05,
-  wireframe: false,
-  side: THREE.DoubleSide,
-});
-const cup = new GLTFLoader();
-cup.load(
-  import.meta.env.VITE_OBJ_CUP,
-  function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(0.1, 0.1, 0.1);
+const importCup = new ImportGLTF();
+importCup
+  .loadModel(import.meta.env.VITE_OBJ_CUP, 0.1)
+  .then((model) => scene.add(model));
+importCup.material.transparent = true;
+importCup.material.opacity = 0.05;
 
-    model.position.y = 0.001;
-    model.traverse((child) => {
-      if (child.isMesh) {
-        child.material = cupMaterial;
-      }
-    });
-    scene.add(model);
-  },
-  function (xhr) {
-    // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  function (error) {
-    console.log(error);
-  }
-);
-
-//------------------------------------------------//
-//---------------- IMPORT LIQUID --------------------//
-
-//Clip plane
-
-const localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
-
-const globalPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 2);
-const helper = new THREE.PlaneHelper(localPlane, 3, 0xffff00);
-//scene.add(helper);
-
-const liquidMaterial = new THREE.MeshPhysicalMaterial({
-  transparent: true,
-  roughness: 0,
-  opacity: 0.4,
-
-  transmission: 1,
-  wireframe: false,
-  clipIntersection: true,
-  clipShadows: true,
-  clippingPlanes: [localPlane],
-  side: THREE.DoubleSide,
-});
-const liquid = new GLTFLoader();
-liquid.load(
-  import.meta.env.VITE_OBJ_TEA,
-  function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(0.1, 0.1, 0.1);
-    model.position.y = 0.001;
-    model.traverse((child) => {
-      if (child.isMesh) {
-        child.material = liquidMaterial;
-      }
-    });
-    scene.add(model);
-  },
-  function (xhr) {
-    // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-  },
-  function (error) {
-    console.log(error);
-  }
-);
-
-//------------------------------------------------//
-
-//---------------- CREATE GROUND --------------------//
-
-const groundGeo = new THREE.PlaneGeometry(10, 10);
-const groundMat = new THREE.MeshBasicMaterial({
-  color: 0xeeeeee,
-  wireframe: false,
-  side: THREE.DoubleSide,
-});
-const ground = new THREE.Mesh(groundGeo, groundMat);
-ground.rotation.x = -Math.PI / 2;
-//scene.add(ground);
-
-//------------------------------------------------//
+//---------------- IMPORT TEA --------------------//
+const importTea = new ImportGLTF();
+importTea.material.clippingPlanes = [localPlane];
+importTea.material.clipIntersection = true;
+importTea
+  .loadModel(import.meta.env.VITE_OBJ_TEA, 0.1)
+  .then((model) => scene.add(model));
 
 //---------------- CREATE LIGHTS --------------------//
 
@@ -130,23 +54,21 @@ scene.add(pointLight);
 function animate() {
   if (composed.value.tea.length !== 0) {
     if (composed.value.tea === "black") {
-      liquidMaterial.specularColor = new THREE.Color("#3B2F2F");
-      liquidMaterial.color = new THREE.Color("#3B2F2F");
-      //liquidMaterial.emissive = new THREE.Color("#3B2F2F");
-      liquidMaterial.emissiveIntensity = 100;
+      importTea.material.color = new THREE.Color("#3B2F2F");
+      importTea.material.emissiveIntensity = 100;
     } else if (composed.value.tea === "green") {
-      liquidMaterial.color = new THREE.Color("#A3C47D");
+      importTea.material.color = new THREE.Color("#A3C47D");
     } else if (composed.value.tea === "white") {
-      liquidMaterial.color = new THREE.Color("#F8F5E1");
+      importTea.material.color = new THREE.Color("#F8F5E1");
     } else if (composed.value.tea === "blue") {
-      liquidMaterial.color = new THREE.Color("#6C7A89");
+      importTea.material.color = new THREE.Color("#6C7A89");
     }
 
     if (localPlane.constant < 2.75) {
       localPlane.constant += 0.02;
     }
   }
-  renderer.render(scene, camera);
+  init.renderer.render(scene, init.camera);
 }
 
 onMounted(() => {
@@ -155,10 +77,10 @@ onMounted(() => {
       width: threeContainer.value.clientWidth,
       height: threeContainer.value.clientHeight,
     };
-    renderer.setSize(size.value.width, size.value.height);
-    camera.aspect = size.value.width / size.value.height;
-    camera.updateProjectionMatrix();
-    threeContainer.value.appendChild(renderer.domElement);
+    init.renderer.setSize(size.value.width, size.value.height);
+    init.camera.aspect = size.value.width / size.value.height;
+    init.camera.updateProjectionMatrix();
+    threeContainer.value.appendChild(init.renderer.domElement);
     animate();
   }
 });
