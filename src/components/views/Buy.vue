@@ -16,12 +16,12 @@
         draggable="false"
         class="min-h-60 max-h-100 justify-self-center my-auto ml-auto hidden sm:inline-block"
       /> -->
-      <div
+      <!-- <div
         id="viz"
         class="justify-self-center my-auto ml-auto hidden sm:inline-block w-fit h-fit overflow-hidden"
       >
-        <Viz />
-      </div>
+    </div> -->
+      <Viz />
       <!-- Bubble tea Editor Form -->
       <div class="grid justify-center text-primary mr-auto gap-6">
         <form action="" class="flex flex-col gap-4 text-sm">
