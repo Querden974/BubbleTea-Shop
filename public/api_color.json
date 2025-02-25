@@ -1,0 +1,20 @@
+{
+    "teas": [
+        {
+            "name": "black",
+            "color": "#3B2F2F"
+        },
+        {
+            "name": "green",
+            "color": "#A3C47D"
+        },
+        {
+            "name": "white",
+            "color": "#F8F5E1"
+        },
+        {
+            "name": "blue",
+            "color": "#6C7A89"
+        }
+    ]
+}
