@@ -19,6 +19,7 @@ const lang = ref(document.querySelector("html").dataset.lang);
 const langData = ref();
 
 const api = ref(import.meta.env.VITE_API_LANG);
+const colors = ref();
 
 onBeforeMount(async () => {
   try {
@@ -32,8 +33,21 @@ onBeforeMount(async () => {
     console.error("Erreur lors de la récupération des ingrédients :", error);
   }
 });
+onBeforeMount(async () => {
+  try {
+    const response = await fetch("/api_color.json");
+    if (!response.ok) {
+      throw new Error("HTTP error " + response.status);
+    }
+    colors.value = await response.json();
+    //console.log(langData.value);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des ingrédients :", error);
+  }
+});
 provide("lang", lang);
 provide("langData", langData);
+provide("colors", colors);
 
 const year = computed(() => new Date().getFullYear());
 </script>
