@@ -11,6 +11,12 @@ Bubble Tea Shop est une application web qui permet aux utilisateurs de composer 
 
 ## Changelog
 
+### Version 1.5
+
+**Date de publication :** _27/02/2025_
+
+- Fonction pour ajouter des bobas dynamiquement via le formulaire.
+
 ### Version 1.4
 
 **Date de publication :** _23/02/2025_
