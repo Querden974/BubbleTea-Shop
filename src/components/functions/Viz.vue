@@ -1,7 +1,13 @@
 <template>
   <!-- <p>{{ colors.teas.find((a) => a.name === "black").color }}</p> -->
-  <p>current : {{ currColor }}</p>
-  <p>next : {{ nextColor ? nextColor : "null" }}</p>
+  <!-- <div class="flex flex-col h-fit">
+    <p>current : {{ currColor }}</p>
+    <p>next : {{ nextColor ? nextColor : "null" }}</p>
+    <p>{{ boba }}</p>
+    <p>{{ bobaNextAmount ? bobaNextAmount : 0 }}</p>
+    <p>{{ bobaNextFlavor ? bobaNextFlavor : "null" }}</p>
+    <p>{{ bobaCurrentAmount }}</p>
+  </div> -->
   <div
     v-show="true"
     ref="threeContainer"
@@ -15,14 +21,46 @@ import * as TWEEN from "@tweenjs/tween.js";
 import * as CANNON from "cannon-es";
 import CannonDebugger from "cannon-es-debugger";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { Geometry, ImportGLTF, Initialize } from "./3DViz";
+import {
+  ImportGLTF,
+  Initialize,
+  CreateSpherePhysics,
+  RemoveSpherePhysics,
+  sphereElements,
+  createPhysics,
+} from "./3DViz";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { computed, inject, onMounted, ref, watch } from "vue";
+import { ClearPass } from "three/examples/jsm/Addons.js";
+
+const props = defineProps({
+  BobaSel: String,
+});
 
 const threeContainer = ref();
 const size = ref();
 const composed = inject("composed");
 const colors = inject("colors");
+const boba = computed(() => {
+  const tastes = [];
+  composed.value.boba.forEach((boba) => {
+    tastes.push({ taste: boba.name, amount: boba.amount * 10 });
+  });
+  return tastes;
+});
+const bobaNextAmount = computed(() =>
+  boba.value?.reduce((acc, val) => {
+    acc += val?.amount;
+    return acc;
+  }, 0)
+);
+const bobaNextFlavor = computed(() =>
+  boba.value?.reduce((acc, val) => {
+    return val.taste;
+  }, 0)
+);
+
+const bobaCurrentAmount = ref(0);
 
 const nextColor = computed(
   () => colors.value?.teas.find((a) => a.name === composed.value.tea)?.color
@@ -32,6 +70,8 @@ const currColor = ref(
 );
 
 const init = new Initialize();
+init.camera.position.set(0, 1, 3.5);
+
 // init.renderer.setAnimationLoop(animate);
 const scene = init.scene;
 
@@ -52,42 +92,55 @@ groundPlane.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 physicsWorld.addBody(groundPlane);
 
 const radius = 0.1;
-const sphereBodies = [];
-for (let x = 0; x < 40; x++) {
-  const sphere = new CANNON.Body({
-    mass: 1,
-    shape: new CANNON.Sphere(radius),
-    friction: 1,
-    linearDamping: 0.7,
-    allowSleep: true,
-    sleepTimeLimit: 1,
-    sleepSpeedLimit: 0.4,
+let timedOut;
+let selection;
+watch([bobaNextAmount, bobaNextFlavor, props], ([newVal, flavor, selected]) => {
+  clearTimeout(timedOut);
+  if (newVal > bobaCurrentAmount.value) {
+    resumeRender();
+    const color = colors?.value?.bobas?.find(
+      (a) => a.name === selected.BobaSel
+    ).color;
+    CreateSpherePhysics(radius, 10, flavor, color, scene, physicsWorld);
+    bobaCurrentAmount.value = newVal;
+    timedOut = setTimeout(() => {
+      sphereElements.forEach((sphere) => {
+        sphere.body.sleep();
+        pauseRender();
+      });
+    }, 5000);
+  } else {
+    resumeRender();
+    selection = sphereElements
+      .filter(
+        (sphere) =>
+          sphere.flavor.toLowerCase() === selected.BobaSel.toLowerCase()
+      )
+      .slice(0, 10);
+    selection.forEach((sphere) => {
+      RemoveSpherePhysics(sphere, selected.BobaSel, scene, physicsWorld);
+      sphereElements.splice(sphereElements.indexOf(sphere), 1);
+    });
 
-    position: new CANNON.Vec3(
-      Math.random() * 0.25,
-      x * radius * 5,
-      Math.random() * 0.25
-    ),
-  });
-  sphereBodies.push(sphere);
-  physicsWorld.addBody(sphere);
-  setTimeout(() => {
-    sphere.sleep();
-    // pauseRender();
-  }, 5000);
-}
-const sphereMehses = [];
-sphereBodies.forEach((sphere) => {
-  const sphereGeo = new THREE.SphereGeometry(radius);
-  const sphereMat = new THREE.MeshNormalMaterial();
-  const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
-  sphereMehses.push(sphereMesh);
-  scene.add(sphereMesh);
+    bobaCurrentAmount.value = newVal;
+
+    timedOut = setTimeout(() => {
+      pauseRender();
+    }, 5000);
+  }
 });
 
 const localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), -0.1);
 const helper = new THREE.PlaneHelper(localPlane, 3, 0xffff00);
 // scene.add(helper);
+
+// const cylinder = new CANNON.Body({
+//   type: CANNON.Body.STATIC,
+//   invMass: 0,
+//   shape: new CANNON.Cylinder(1, 0.75, 3, 64),
+//   position: new CANNON.Vec3(0, 1, 0),
+// });
+// physicsWorld.addBody(cylinder);
 
 const collider = new GLTFLoader();
 
@@ -100,49 +153,14 @@ collider.load("/untitled.glb", (gltf) => {
       child.castShadow = true;
       child.receiveShadow = true;
       child.material.transparent = true;
-      child.material.opacity = 0;
+      child.material.opacity = 0.5;
+      child.scale.set(1, 1, 1);
 
       // On crée un corps physique correspondant à la géométrie
-      createPhysics(child);
+      createPhysics(child, physicsWorld);
     }
   });
 });
-function createPhysics(mesh) {
-  mesh.updateMatrixWorld(true); // Appliquer l'échelle et la rotation
-
-  // Extraire les sommets et les indices correctement
-  const vertices = Array.from(mesh.geometry.attributes.position.array).reduce(
-    (acc, val, i) => {
-      if (i % 3 === 0) acc.push(new CANNON.Vec3());
-      acc[acc.length - 1][["x", "y", "z"][i % 3]] = val;
-      return acc;
-    },
-    []
-  );
-
-  const indices = Array.from(mesh.geometry.index.array);
-  const faces = [];
-  for (let i = 0; i < indices.length; i += 3) {
-    faces.push([indices[i], indices[i + 1], indices[i + 2]]);
-  }
-
-  // Création du shape ConvexPolyhedron
-  const shape = new CANNON.ConvexPolyhedron({ vertices, faces });
-
-  // Création du corps physique
-  const body = new CANNON.Body({
-    type: CANNON.Body.STATIC,
-    shape: shape,
-    position: new CANNON.Vec3(
-      mesh.position.x,
-      mesh.position.y,
-      mesh.position.z
-    ),
-  });
-
-  physicsWorld.addBody(body);
-  mesh.userData.body = body; // Associer le corps au mesh pour la synchro
-}
 
 //---------------- IMPORT CUP --------------------//
 // const importCup = new ImportGLTF();
@@ -212,30 +230,28 @@ scene.add(pointLight);
 // RENDER CONTROLS
 let isPaused = false;
 let initRenderView = false;
+
 function animate(time) {
-  // physicsWorld.step(1 / 128);
-  physicsWorld.fixedStep();
+  physicsWorld.fixedStep(1 / 24, 10);
+
   // cannonDebugger.update();
-  orbit.update();
+  // orbit.update();
   if (!initRenderView) {
     setTimeout(() => {
       init.renderer.render(scene, init.camera);
       initRenderView = true;
-      // physicsWorld.fixedStep();
     }, 100);
   }
   if (!isPaused) {
     const requestID = window.requestAnimationFrame(animate);
     TWEEN.update(time);
-    // cannonDebugger.update();
-    sphereMehses.forEach((sphere, index) => {
-      sphere.position.copy(sphereBodies[index].position);
-      sphere.quaternion.copy(sphereBodies[index].quaternion);
+    sphereElements.forEach((sphere, index) => {
+      sphere.mesh.position.copy(sphere.body.position);
+      sphere.mesh.quaternion.copy(sphere.body.quaternion);
+      // sphere.radius.copy(sphereBodies[index].shapes[0].radius);
     });
-    // sphereMesh.position.copy(sphere.position);
-    // sphereMesh.quaternion.copy(sphere.quaternion);
+
     init.renderer.render(scene, init.camera);
-    // console.log(time);
   }
 }
 function pauseRender() {
@@ -248,8 +264,8 @@ function resumeRender() {
   }
 }
 //-----------------------------------------------//
-const orbit = new OrbitControls(init.camera, init.renderer.domElement);
-orbit.update();
+// const orbit = new OrbitControls(init.camera, init.renderer.domElement);
+// orbit.update();
 onMounted(() => {
   if (threeContainer.value) {
     size.value = {
@@ -258,11 +274,10 @@ onMounted(() => {
     };
     init.renderer.setSize(size.value.width, size.value.height);
     init.camera.aspect = size.value.width / size.value.height;
+    // init.camera.rotation.x = Math.PI / 2;
     init.camera.updateProjectionMatrix();
     threeContainer.value.appendChild(init.renderer.domElement);
-    // const orbit = new OrbitControls(init.camera, threeContainer.value);
-    orbit.update();
-    // physicsWorld.step(1 / 25);
+    // orbit.update();
     animate();
   }
 });

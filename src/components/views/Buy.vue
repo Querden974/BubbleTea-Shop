@@ -10,18 +10,7 @@
       {{ langData.buy[lang].title }}
     </h1>
     <div class="sm:grid sm:grid-cols-2 sm:gap-32">
-      <!-- <img
-        src="../../assets/winnies-special-tea-bubble-tea-cup-q9b8f2tsdm8omdh1.png"
-        alt=""
-        draggable="false"
-        class="min-h-60 max-h-100 justify-self-center my-auto ml-auto hidden sm:inline-block"
-      /> -->
-      <!-- <div
-        id="viz"
-        class="justify-self-center my-auto ml-auto hidden sm:inline-block w-fit h-fit overflow-hidden"
-      >
-    </div> -->
-      <Viz />
+      <Viz :BobaSel="lastFlavor" />
       <!-- Bubble tea Editor Form -->
       <div class="grid justify-center text-primary mr-auto gap-6">
         <form action="" class="flex flex-col gap-4 text-sm">
@@ -105,6 +94,7 @@
                 v-if="bobaFlavors && bobaFlavors[lang]"
                 v-for="boba in bobaFlavors[lang]"
                 :title="boba.name"
+                :code="boba.code"
                 :locked="bobaLock"
                 :key="boba.code"
                 @change="(value) => addBoba(value)"
@@ -213,6 +203,7 @@ provide("composed", composed);
 const maxBoba = 4;
 const bobaCount = ref(0);
 const bobaLock = ref(false);
+const lastFlavor = ref("");
 
 const addBoba = (value) => {
   if (
@@ -229,7 +220,8 @@ const addBoba = (value) => {
 };
 
 const changeAmount = (type) => {
-  if (type === "sub") {
+  lastFlavor.value = type.flavor;
+  if (type.type === "sub") {
     bobaCount.value--;
   } else {
     bobaCount.value++;

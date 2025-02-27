@@ -40,6 +40,7 @@ const model = defineModel();
 const emits = defineEmits(["change", "click"]);
 const props = defineProps({
   title: String,
+  code: String,
   locked: Boolean,
 });
 
@@ -54,13 +55,13 @@ const decrease = computed(() => {
   list.value.amount--;
   model.value = list.value;
   emits("change", model.value);
-  emits("click", "sub");
+  emits("click", { type: "sub", flavor: props.code });
 });
 const increase = computed(() => {
   list.value.amount++;
   model.value = list.value;
   emits("change", model.value);
-  emits("click", "add");
+  emits("click", { type: "add", flavor: props.code });
 });
 </script>
 
