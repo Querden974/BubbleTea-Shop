@@ -16,5 +16,23 @@
             "name": "blue",
             "color": "#6C7A89"
         }
+    ],
+    "bobas": [
+        {
+            "name": "tapioca",
+            "color": "#FFFFFF"
+        },
+        {
+            "name": "sugar",
+            "color": "#333333"
+        },
+        {
+            "name": "peach",
+            "color": "#00FF00"
+        },
+        {
+            "name": "grape",
+            "color": "#0000FF"
+        }
     ]
 }
