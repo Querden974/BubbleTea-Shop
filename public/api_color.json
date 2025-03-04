@@ -20,19 +20,35 @@
     "bobas": [
         {
             "name": "tapioca",
-            "color": "#FFFFFF"
+            "color": "#D2B48C"
         },
         {
             "name": "sugar",
-            "color": "#333333"
+            "color": "#F8E7D2"
         },
         {
             "name": "peach",
-            "color": "#00FF00"
+            "color": "#FFB07C"
         },
         {
             "name": "grape",
-            "color": "#0000FF"
+            "color": "#6A0DAD"
+        },
+        {
+            "name": "apple",
+            "color": "#4CAF50"
+        },
+        {
+            "name": "lemon",
+            "color": "#FFD700"
+        },
+        {
+            "name": "litchi",
+            "color": "#EFC6C6"
+        },
+        {
+            "name": "jelly",
+            "color": "#9400D3"
         }
     ]
 }
