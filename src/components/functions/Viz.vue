@@ -1,13 +1,4 @@
 <template>
-  <!-- <p>{{ colors.teas.find((a) => a.name === "black").color }}</p> -->
-  <!-- <div class="flex flex-col h-fit">
-    <p>current : {{ currColor }}</p>
-    <p>next : {{ nextColor ? nextColor : "null" }}</p>
-    <p>{{ boba }}</p>
-    <p>{{ bobaNextAmount ? bobaNextAmount : 0 }}</p>
-    <p>{{ bobaNextFlavor ? bobaNextFlavor : "null" }}</p>
-    <p>{{ bobaCurrentAmount }}</p>
-  </div> -->
   <div
     v-show="true"
     ref="threeContainer"
@@ -25,8 +16,11 @@ import {
   ImportGLTF,
   Initialize,
   CreateSpherePhysics,
+  CreateCubePhysics,
   RemoveSpherePhysics,
+  RemoveCubePhysics,
   sphereElements,
+  boxElements,
   createPhysics,
 } from "./3DViz";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -41,26 +35,6 @@ const threeContainer = ref();
 const size = ref();
 const composed = inject("composed");
 const colors = inject("colors");
-const boba = computed(() => {
-  const tastes = [];
-  composed.value.boba.forEach((boba) => {
-    tastes.push({ taste: boba.name, amount: boba.amount * 10 });
-  });
-  return tastes;
-});
-const bobaNextAmount = computed(() =>
-  boba.value?.reduce((acc, val) => {
-    acc += val?.amount;
-    return acc;
-  }, 0)
-);
-const bobaNextFlavor = computed(() =>
-  boba.value?.reduce((acc, val) => {
-    return val.taste;
-  }, 0)
-);
-
-const bobaCurrentAmount = ref(0);
 
 const nextColor = computed(
   () => colors.value?.teas.find((a) => a.name === composed.value.tea)?.color
@@ -91,6 +65,26 @@ groundPlane.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 
 physicsWorld.addBody(groundPlane);
 
+//---------------- BOBA --------------------//
+const boba = computed(() => {
+  const tastes = [];
+  composed.value.boba.forEach((boba) => {
+    tastes.push({ taste: boba.name, amount: boba.amount * 10 });
+  });
+  return tastes;
+});
+const bobaNextAmount = computed(() =>
+  boba.value?.reduce((acc, val) => {
+    acc += val?.amount;
+    return acc;
+  }, 0)
+);
+const bobaNextFlavor = computed(() =>
+  boba.value?.reduce((acc, val) => {
+    return val.taste;
+  }, 0)
+);
+const bobaCurrentAmount = ref(0);
 const radius = 0.1;
 let timedOut;
 let selection;
@@ -118,7 +112,7 @@ watch([bobaNextAmount, bobaNextFlavor, props], ([newVal, flavor, selected]) => {
       )
       .slice(0, 10);
     selection.forEach((sphere) => {
-      RemoveSpherePhysics(sphere, selected.BobaSel, scene, physicsWorld);
+      RemoveSpherePhysics(sphere, scene, physicsWorld);
       sphereElements.splice(sphereElements.indexOf(sphere), 1);
     });
 
@@ -130,63 +124,126 @@ watch([bobaNextAmount, bobaNextFlavor, props], ([newVal, flavor, selected]) => {
   }
 });
 
-const localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), -0.1);
-const helper = new THREE.PlaneHelper(localPlane, 3, 0xffff00);
-// scene.add(helper);
-
-// const cylinder = new CANNON.Body({
-//   type: CANNON.Body.STATIC,
-//   invMass: 0,
-//   shape: new CANNON.Cylinder(1, 0.75, 3, 64),
-//   position: new CANNON.Vec3(0, 1, 0),
-// });
-// physicsWorld.addBody(cylinder);
-
-const collider = new GLTFLoader();
-
-collider.load("/untitled.glb", (gltf) => {
-  const model = gltf.scene;
-  scene.add(model); // Ajout du modèle à la scène Three.js
-
-  model.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-      child.material.transparent = true;
-      child.material.opacity = 0.5;
-      child.scale.set(1, 1, 1);
-
-      // On crée un corps physique correspondant à la géométrie
-      createPhysics(child, physicsWorld);
-    }
-  });
+// ----------------- END BOBA --------------------//
+//---------------- ICE --------------------//
+const iceAmount = computed(() => {
+  return composed.value.ice * 2;
+});
+const iceCurrentAmount = ref(0);
+const sizeIce = 0.3;
+const iceCreationAmount = 2;
+watch(iceAmount, (newVal) => {
+  clearTimeout(timedOut);
+  resumeRender();
+  if (iceCurrentAmount.value === 0) {
+    CreateCubePhysics(sizeIce, newVal, scene, physicsWorld);
+    iceCurrentAmount.value = newVal;
+  } else if (newVal > iceCurrentAmount.value) {
+    CreateCubePhysics(sizeIce, iceCreationAmount, scene, physicsWorld);
+    iceCurrentAmount.value = newVal;
+  } else {
+    selection = boxElements.slice(0, iceCreationAmount);
+    selection.forEach((item) => {
+      RemoveCubePhysics(item, scene, physicsWorld);
+      boxElements.splice(boxElements.indexOf(item), 1);
+    });
+    iceCurrentAmount.value = newVal;
+  }
+  timedOut = setTimeout(() => {
+    boxElements.forEach((item) => {
+      item.body.sleep();
+      pauseRender();
+    });
+  }, 6000);
 });
 
-//---------------- IMPORT CUP --------------------//
-// const importCup = new ImportGLTF();
-// importCup
-//   .loadModel(import.meta.env.VITE_OBJ_CUP, 1)
-//   .then((model) => scene.add(model));
-// importCup.material.transparent = true;
-// importCup.material.opacity = 0.5;
-//---------------- IMPORT TEA --------------------//
+//---------------- END ICE --------------------//
+const localPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), -0.1);
+const helper = new THREE.PlaneHelper(localPlane, 3, 0xffff00);
 
-const importTea = new ImportGLTF();
-importTea.material.clippingPlanes = [localPlane];
-importTea.material.clipIntersection = true;
-importTea.material.transmission = 1;
-importTea.material.transparent = true;
-importTea.material.opacity = 0.3;
+// --------------- BASIC CUP BOXES ---------------//
+const boxBottom = new CANNON.Body({
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 0.1, 1)),
+  position: new CANNON.Vec3(0, 0.05, 0),
+});
+const boxLeft = new CANNON.Body({
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(0.1, 1, 1)),
+  position: new CANNON.Vec3(-0.9, 1.15, 0),
+});
+const boxRight = new CANNON.Body({
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(0.1, 1, 1)),
+  position: new CANNON.Vec3(0.9, 1.15, 0),
+});
+const boxBack = new CANNON.Body({
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 0.1)),
+  position: new CANNON.Vec3(0, 1.15, -0.9),
+});
+const boxFront = new CANNON.Body({
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 0.1)),
+  position: new CANNON.Vec3(0, 1.15, 0.9),
+});
 
-importTea
-  .loadModel(import.meta.env.VITE_OBJ_TEA, 1)
-  .then((model) => scene.add(model));
+physicsWorld.addBody(boxBottom);
+physicsWorld.addBody(boxLeft);
+physicsWorld.addBody(boxRight);
+physicsWorld.addBody(boxBack);
+physicsWorld.addBody(boxFront);
+
+const boxMat = new THREE.MeshPhysicalMaterial();
+boxMat.color = new THREE.Color("#aaaaaa");
+boxMat.transparent = true;
+boxMat.opacity = 0.5;
+boxMat.transmission = 1;
+const boxBottomGeo = new THREE.BoxGeometry(2, 0.2, 2);
+const boxBottomMesh = new THREE.Mesh(boxBottomGeo, boxMat);
+boxBottomMesh.position.set(0, 0.05, 0);
+
+const boxLeftGeo = new THREE.BoxGeometry(0.2, 2, 1.6);
+const boxLeftMesh = new THREE.Mesh(boxLeftGeo, boxMat);
+boxLeftMesh.position.set(-0.9, 1.15, 0);
+
+const boxRightGeo = new THREE.BoxGeometry(0.2, 2, 1.6);
+const boxRightMesh = new THREE.Mesh(boxRightGeo, boxMat);
+boxRightMesh.position.set(0.9, 1.15, 0);
+
+const boxBackGeo = new THREE.BoxGeometry(2, 2, 0.2);
+const boxBackMesh = new THREE.Mesh(boxBackGeo, boxMat);
+boxBackMesh.position.set(0, 1.15, -0.9);
+
+const boxFrontGeo = new THREE.BoxGeometry(2, 2, 0.2);
+const boxFrontMesh = new THREE.Mesh(boxFrontGeo, boxMat);
+boxFrontMesh.position.set(0, 1.15, 0.9);
+
+scene.add(boxLeftMesh);
+scene.add(boxRightMesh);
+scene.add(boxBackMesh);
+scene.add(boxFrontMesh);
+scene.add(boxBottomMesh);
+
+const boxLiquid = new THREE.BoxGeometry(1.6, 1.6, 1.6);
+const boxLiquidMat = new THREE.MeshPhysicalMaterial();
+// boxLiquidMat.color = new THREE.Color("#ff0000");
+boxLiquidMat.transparent = true;
+boxLiquidMat.opacity = 0.35;
+boxLiquidMat.transmission = 1;
+boxLiquidMat.clipIntersection = true;
+boxLiquidMat.clippingPlanes = [localPlane];
+const boxLiquidMesh = new THREE.Mesh(boxLiquid, boxLiquidMat);
+boxLiquidMesh.position.set(0, 1, 0);
+scene.add(boxLiquidMesh);
+
+// --------------- END BASIC CUP BOXES ---------------//
 
 const tweenTea = new TWEEN.Tween({ x: 0 })
   .to({ x: 1 }, 1000)
   .onUpdate(({ x }) => {
-    importTea.material.color.lerpColors(
-      importTea.material.color,
+    boxLiquidMat.color.lerpColors(
+      boxLiquidMat.color,
       new THREE.Color(nextColor.value),
       x
     );
@@ -230,9 +287,9 @@ scene.add(pointLight);
 // RENDER CONTROLS
 let isPaused = false;
 let initRenderView = false;
-
+// const orbit = new OrbitControls(init.camera, init.renderer.domElement);
 function animate(time) {
-  physicsWorld.fixedStep(1 / 24, 10);
+  physicsWorld.fixedStep(1 / 50);
 
   // cannonDebugger.update();
   // orbit.update();
@@ -248,7 +305,10 @@ function animate(time) {
     sphereElements.forEach((sphere, index) => {
       sphere.mesh.position.copy(sphere.body.position);
       sphere.mesh.quaternion.copy(sphere.body.quaternion);
-      // sphere.radius.copy(sphereBodies[index].shapes[0].radius);
+    });
+    boxElements.forEach((box, index) => {
+      box.mesh.position.copy(box.body.position);
+      box.mesh.quaternion.copy(box.body.quaternion);
     });
 
     init.renderer.render(scene, init.camera);

@@ -9,6 +9,10 @@
     >
       {{ langData.buy[lang].title }}
     </h1>
+    <!-- <marquee behavior="scroll" direction="left">
+      3D Canvas Work in progress
+    </marquee> -->
+
     <div class="sm:grid sm:grid-cols-2 sm:gap-32">
       <Viz :BobaSel="lastFlavor" />
       <!-- Bubble tea Editor Form -->
@@ -119,9 +123,9 @@
             v-if="langData && langData.buy[lang]"
             :title="langData.buy[lang].ice"
             :min="0"
-            :max="5"
-            :step="0.5"
-            :startAt="2.5"
+            :max="6"
+            :step="1"
+            :startAt="3"
             :scale="langData.buy[lang].ice_level"
             v-model="composed.ice"
           />
@@ -138,7 +142,7 @@
       <!-- End Bubble tea Editor Form -->
     </div>
   </div>
-  <p>{{ composed }}</p>
+  <!-- <p>{{ composed }}</p> -->
 </template>
 
 <script setup>

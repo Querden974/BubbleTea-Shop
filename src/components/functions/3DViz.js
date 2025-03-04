@@ -107,9 +107,9 @@ function CreateSpherePhysics(
       sleepSpeedLimit: 0.4,
 
       position: new CANNON.Vec3(
-        Math.random() * 0.25,
+        Math.random() * 1 + Math.sin(x * Math.PI * 15) - 0.3,
         x * radius * 5 + 3,
-        Math.random() * 0.25
+        Math.sin(x * Math.PI * 10)
       ),
     });
     // console.log(colors.value.bobas.find((a) => a.name === flavor).color);
@@ -126,7 +126,7 @@ function CreateSpherePhysics(
   return elements;
 }
 
-function RemoveSpherePhysics(sphere, flavor, scene, physicsWorld) {
+function RemoveSpherePhysics(sphere, scene, physicsWorld) {
   // resumeRender();
 
   const sphereTween = new TWEEN.Tween({ x: 1 })
@@ -140,6 +140,61 @@ function RemoveSpherePhysics(sphere, flavor, scene, physicsWorld) {
       scene.remove(sphere.mesh);
     });
   sphereTween.start();
+}
+const boxElements = [];
+function CreateCubePhysics(size, amount, scene, physicsWorld) {
+  // resumeRender();
+  const elements = [];
+  for (let x = 0; x < amount; x++) {
+    const box = new CANNON.Body({
+      mass: 3,
+      shape: new CANNON.Box(
+        new CANNON.Vec3(size * 0.5, size * 0.5, size * 0.5)
+      ),
+      friction: 1,
+      linearDamping: 0.9,
+      angularDamping: 0.9,
+      ccdSpeedThreshold: 0.5,
+      allowSleep: true,
+      sleepTimeLimit: 1,
+      sleepSpeedLimit: 0.4,
+      quaternion: new CANNON.Quaternion().setFromAxisAngle(
+        new CANNON.Vec3(1, 1, 0),
+        Math.random() * Math.PI * 2
+      ),
+      position: new CANNON.Vec3(
+        Math.sin(x * Math.PI * 2) * 0.8,
+        x * size * 5 + 5,
+        Math.sin(x * Math.PI * 2) * 0.8
+      ),
+    });
+    // console.log(colors.value.bobas.find((a) => a.name === flavor).color);
+    const Geo = new THREE.BoxGeometry(size, size, size);
+    const Mat = new THREE.MeshBasicMaterial();
+    Mat.color = new THREE.Color("#aaaaaa");
+    //sphereMat.color = colors.value.bobas.find((a) => a.name === flavor).color;
+    const Mesh = new THREE.Mesh(Geo, Mat);
+
+    boxElements.push({ mesh: Mesh, body: box });
+    scene.add(Mesh);
+    physicsWorld.addBody(box);
+  }
+  return elements;
+}
+function RemoveCubePhysics(item, scene, physicsWorld) {
+  // resumeRender();
+
+  const Tween = new TWEEN.Tween({ x: 1 })
+    .to({ x: 0 }, 1000)
+    .onUpdate(({ x }) => {
+      item.body.shapes[0].radius *= x;
+      item.mesh.scale.set(x, x, x);
+    })
+    .onComplete(() => {
+      physicsWorld.removeBody(item.body);
+      scene.remove(item.mesh);
+    });
+  Tween.start();
 }
 
 function createPhysics(mesh, physicsWorld) {
@@ -201,6 +256,9 @@ export {
   Initialize,
   CreateSpherePhysics,
   RemoveSpherePhysics,
+  CreateCubePhysics,
+  RemoveCubePhysics,
   createPhysics,
   sphereElements,
+  boxElements,
 };
