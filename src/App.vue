@@ -35,7 +35,7 @@ onBeforeMount(async () => {
 });
 onBeforeMount(async () => {
   try {
-    const response = await fetch("/api_color.json");
+    const response = await fetch(import.meta.env.VITE_API_COLORS);
     if (!response.ok) {
       throw new Error("HTTP error " + response.status);
     }
