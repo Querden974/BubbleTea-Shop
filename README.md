@@ -11,6 +11,13 @@ Bubble Tea Shop est une application web qui permet aux utilisateurs de composer 
 
 ## Changelog
 
+### Version 1.6
+
+**Date de publication :** _04/03/2025_
+
+- Fonction permettant d'ajouter les glaçons dynamiquement via le range input associé.
+- Remplacement de la géométrie par des objets basiques pour le rendu 3D.
+
 ### Version 1.5
 
 **Date de publication :** _27/02/2025_
